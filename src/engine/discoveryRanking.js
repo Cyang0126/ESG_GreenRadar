@@ -16,7 +16,7 @@ function seededJitter(seed) {
 function rankingReasonFor(company, boosts) {
   if (company.previousSignal !== company.currentSignal) return "Fresh signal change";
   if ((company.materialityScore ?? company.deteriorationScore) >= 75) return "High materiality";
-  if (boosts.interestBoost >= 8) return "Watched sector";
+  if (boosts.interestBoost >= 8) return "Watchlist match";
   if (boosts.learningBoost >= 8) return "Learning value";
   if (company.evidenceConfidenceOverall >= 80) return "Strong evidence";
   return "Relevant update";

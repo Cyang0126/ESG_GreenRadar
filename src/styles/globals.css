@@ -1758,6 +1758,8 @@ body[data-theme="dark"] .alert-toast .alert-close {
   height: 100%;
   scroll-snap-type: y mandatory;
   overscroll-behavior-y: contain;
+  scroll-behavior: auto;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
 

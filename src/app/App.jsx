@@ -46,7 +46,6 @@ export default function App() {
   const [isBriefUnread, setIsBriefUnread] = useState(false);
   const [briefSnapshot, setBriefSnapshot] = useState(() => buildDailyBrief(companies));
   const [discoveryRestoreKey, setDiscoveryRestoreKey] = useState(0);
-  const [discoveryAnchorTicker, setDiscoveryAnchorTicker] = useState(null);
   const [detailOpenedFromAlert, setDetailOpenedFromAlert] = useState(false);
   const [friendIds, setFriendIds] = useState(() => new Set(INITIAL_FRIEND_IDS));
 
@@ -77,25 +76,6 @@ export default function App() {
     () => buildDiscoveryCards(companiesWithWatchlist),
     [companiesWithWatchlist]
   );
-
-  useEffect(() => {
-    if (!discoveryAnchorTicker && dynamicDiscoveryCards.length > 0) {
-      setDiscoveryAnchorTicker(dynamicDiscoveryCards[0].ticker);
-    }
-  }, [discoveryAnchorTicker, dynamicDiscoveryCards]);
-
-  function updateDiscoveryAnchorFromScroll(scrollTop) {
-    discoveryScrollTopRef.current = scrollTop;
-    const frameHeight = screenFrameRef.current?.clientHeight ?? 1;
-    const currentIndex = Math.max(
-      0,
-      Math.min(dynamicDiscoveryCards.length - 1, Math.round(scrollTop / frameHeight))
-    );
-    const currentTicker = dynamicDiscoveryCards[currentIndex]?.ticker ?? null;
-    if (currentTicker && currentTicker !== discoveryAnchorTicker) {
-      setDiscoveryAnchorTicker(currentTicker);
-    }
-  }
 
   const watchedCompanies = useMemo(
     () => companiesWithWatchlist.filter((company) => company.isWatched),
@@ -538,8 +518,9 @@ export default function App() {
               onToggleWatchlist={() => {}}
               initialScrollTop={discoveryScrollTopRef.current}
               restoreKey={discoveryRestoreKey}
-              scrollToTicker={discoveryAnchorTicker}
-              onScrollPositionChange={updateDiscoveryAnchorFromScroll}
+              onScrollPositionChange={(scrollTop) => {
+                discoveryScrollTopRef.current = scrollTop;
+              }}
             />
             <BriefPromptScreen onOpenBrief={openBriefFromPrompt} onSeeLater={seeBriefLater} />
           </>
@@ -558,8 +539,9 @@ export default function App() {
             onToggleWatchlist={toggleWatchlist}
             initialScrollTop={discoveryScrollTopRef.current}
             restoreKey={discoveryRestoreKey}
-            scrollToTicker={discoveryAnchorTicker}
-            onScrollPositionChange={updateDiscoveryAnchorFromScroll}
+            onScrollPositionChange={(scrollTop) => {
+              discoveryScrollTopRef.current = scrollTop;
+            }}
           />
         )}
         {route === ROUTES.company && (
