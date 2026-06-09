@@ -1,0 +1,20 @@
+:root {
+  --bg: #e5e7eb;
+  --surface: #ffffff;
+  --surface-muted: #eef2e7;
+  --text: #15211d;
+  --muted: #637169;
+  --line: #d9dfd6;
+  --green: #15803d;
+  --green-soft: #dcfce7;
+  --watch: #b45309;
+  --watch-soft: #fef3c7;
+  --red: #b91c1c;
+  --red-soft: #fee2e2;
+  --ink: #0f172a;
+  --accent: #2563eb;
+  --shadow: 0 18px 50px rgba(15, 23, 42, 0.12);
+  --phone-width: 420px;
+  --header-height: 72px;
+  --nav-height: 72px;
+}
