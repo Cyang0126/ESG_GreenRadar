@@ -41,7 +41,7 @@ export default function App() {
   );
   const [demoOverrides, setDemoOverrides] = useState({});
   const [activePresenterActions, setActivePresenterActions] = useState(() => new Set());
-  const [alert, setAlert] = useState(null);
+  const [notifications, setNotifications] = useState([]);
   const [bannerVisible, setBannerVisible] = useState(false);
   const [selectedReceiptId, setSelectedReceiptId] = useState(null);
   const [isBriefUnread, setIsBriefUnread] = useState(false);
@@ -71,7 +71,7 @@ export default function App() {
       bannerTimerRef.current = null;
     }
 
-    if (appPhase === "app" && alert) {
+    if (appPhase === "app" && notifications.length > 0) {
       setBannerVisible(true);
       bannerTimerRef.current = setTimeout(() => {
         setBannerVisible(false);
@@ -86,7 +86,7 @@ export default function App() {
         bannerTimerRef.current = null;
       }
     };
-  }, [alert, appPhase]);
+  }, [appPhase, notifications]);
 
   const companiesWithWatchlist = useMemo(
     () =>
@@ -241,33 +241,42 @@ export default function App() {
     });
   }
 
-  function openAlert() {
-    if (!alert) return;
+  function enqueueNotifications(nextNotifications) {
+    const incoming = Array.isArray(nextNotifications) ? nextNotifications.filter(Boolean) : [nextNotifications].filter(Boolean);
+    if (incoming.length === 0) return;
+    setNotifications((current) => [...current, ...incoming]);
+  }
 
-    const targetRoute = alert.targetRoute ?? ROUTES.company;
+  function dismissNotification(notificationId) {
+    setNotifications((current) => current.filter((notification) => notification.id !== notificationId));
+  }
+
+  function openAlert(notification) {
+    if (!notification) return;
+
+    const targetRoute = notification.targetRoute ?? ROUTES.company;
 
     setBannerVisible(false);
+    dismissNotification(notification.id);
 
     if (targetRoute === ROUTES.brief) {
       setIsBriefUnread(false);
       setDetailOpenedFromAlert(false);
       setAppPhase("app");
       navigate(ROUTES.brief);
-      setAlert(null);
       return;
     }
 
-    setSelectedTicker(alert.ticker);
+    setSelectedTicker(notification.ticker);
     setDetailOpenedFromAlert(true);
     setAppPhase("app");
     navigate(targetRoute);
-    setAlert(null);
   }
 
   function simulateAlert(ticker) {
     const company = companiesWithWatchlist.find((item) => item.ticker === ticker);
     const redFlagAlert = company ? buildRedFlagAlert(company) : null;
-    setAlert(redFlagAlert);
+    enqueueNotifications(redFlagAlert);
     if (redFlagAlert && appPhase === "app") {
       setBannerVisible(true);
     }
@@ -322,14 +331,14 @@ export default function App() {
       setRoute(ROUTES.discovery);
       setRouteHistory([]);
     }
-    setAlert(buildRedFlagAlert({ ...overriddenCompany, isWatched: baseCompany.isWatched }));
+    enqueueNotifications(buildRedFlagAlert({ ...overriddenCompany, isWatched: baseCompany.isWatched }));
   }
 
   function generateDailyReport() {
     setBriefSnapshot(buildDailyBrief(companiesWithWatchlist));
     markPresenterAction("report:general");
     setIsBriefUnread(true);
-    setAlert({
+    enqueueNotifications({
       id: "alert-daily-report",
       ticker: selectedTicker,
       companyName: "Daily Brief",
@@ -480,7 +489,7 @@ export default function App() {
     setBriefSnapshot(buildDailyBrief(nextCompanies));
     markPresenterAction("report:forced-change");
     setIsBriefUnread(true);
-    setAlert({
+    enqueueNotifications({
       id: "alert-forced-report",
       ticker: "XOM",
       companyName: "Daily Brief",
@@ -494,7 +503,7 @@ export default function App() {
     setAppPhase("closed");
     setDemoOverrides({});
     setActivePresenterActions(new Set());
-    setAlert(null);
+    setNotifications([]);
     setBannerVisible(false);
     setSelectedTicker("NVDA");
     setSelectedReceiptId(null);
@@ -560,10 +569,10 @@ export default function App() {
         <main className="screen-frame" ref={screenFrameRef}>
         {appPhase === "closed" && (
           <LockScreen
-            alert={alert}
+            notifications={notifications}
             onStart={openApp}
             onOpenAlert={openAlert}
-            onDismissAlert={() => setAlert(null)}
+            onDismissAlert={dismissNotification}
           />
         )}
         {appPhase === "splash" && <SplashScreen />}
@@ -667,8 +676,12 @@ export default function App() {
               onNavigate={navigate}
               unreadRoutes={{ [ROUTES.brief]: isBriefUnread }}
             />
-            {bannerVisible && alert && (
-              <NotificationBanner alert={alert} onOpen={openAlert} onClose={() => setAlert(null)} />
+            {bannerVisible && notifications.length > 0 && (
+              <NotificationBanner
+                notifications={notifications}
+                onOpen={openAlert}
+                onClose={dismissNotification}
+              />
             )}
           </>
         )}
