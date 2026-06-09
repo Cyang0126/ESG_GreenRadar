@@ -2240,60 +2240,6 @@ body[data-theme="dark"] .discovery-watch .mini-score {
   letter-spacing: 0;
 }
 
-.discovery-progress {
-  display: grid;
-  gap: 8px;
-  margin: 14px 0 14px;
-}
-
-.discovery-progress-label {
-  color: rgba(255, 255, 255, 0.74);
-  font-size: 11px;
-  font-weight: 850;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.discovery-progress-track {
-  overflow: hidden;
-  height: 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-}
-
-.discovery-progress-fill {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-}
-
-.discovery-progress-red {
-  background: linear-gradient(90deg, rgba(255, 56, 92, 0.58), rgba(255, 56, 92, 0.94));
-}
-
-.discovery-progress-watch {
-  background: linear-gradient(90deg, rgba(245, 158, 11, 0.58), rgba(245, 158, 11, 0.94));
-}
-
-.discovery-progress-green {
-  background: linear-gradient(90deg, rgba(40, 209, 124, 0.58), rgba(40, 209, 124, 0.94));
-}
-
-.discovery-progress-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 12px;
-  font-weight: 850;
-}
-
-.discovery-progress-meta strong {
-  color: white;
-  white-space: nowrap;
-}
-
 .discovery-caption p {
   margin: 0 0 14px;
   color: rgba(255, 255, 255, 0.82);

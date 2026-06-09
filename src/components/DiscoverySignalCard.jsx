@@ -8,19 +8,15 @@ export default function DiscoverySignalCard({
 }) {
   const { company } = card;
   const healthScore = healthScoreFromRisk(company.deteriorationScore);
-  const signalToneLabel =
-    card.previousSignal === card.signal
-      ? "Stable update"
-      : card.signal === "red"
-        ? "Critical update"
-        : card.signal === "watch"
-          ? "Watch update"
-          : "Green update";
+  const signalChanged = card.previousSignal !== card.signal;
+  const signalToneLabel = signalChanged
+    ? card.signal === "red"
+      ? "Critical update"
+      : card.signal === "watch"
+        ? "Watch update"
+        : "Green update"
+    : "Stable update";
   const previousSignalLabel = card.previousSignal ? card.previousSignal.toUpperCase() : "N/A";
-  const evidenceConfidenceScore = Math.max(
-    0,
-    Math.min(100, Math.round(company.evidenceConfidenceOverall ?? 0))
-  );
 
   return (
     <article className={`discovery-snap-card discovery-${card.signal}`}>
@@ -41,7 +37,7 @@ export default function DiscoverySignalCard({
       <div className={`discovery-score-orb orb-${card.signal}`}>
         <span>{healthScore}</span>
         <strong>{card.signal.toUpperCase()}</strong>
-        {card.previousSignal !== card.signal && <small>from {previousSignalLabel}</small>}
+        {signalChanged && <small>from {previousSignalLabel}</small>}
       </div>
 
       <DiscoveryActionRail
@@ -62,23 +58,6 @@ export default function DiscoverySignalCard({
         <div className="mini-score">
           <span>Material ESG risk</span>
           <strong>{Math.round(company.materialityScore)}</strong>
-        </div>
-        <div className="discovery-progress">
-          <span className="discovery-progress-label">Signal depth</span>
-          <div className="discovery-progress-track" aria-hidden="true">
-            <span
-              className={`discovery-progress-fill discovery-progress-${card.signal}`}
-              style={{ width: `${Math.max(18, evidenceConfidenceScore)}%` }}
-            />
-          </div>
-          <div className="discovery-progress-meta">
-            <span>
-              {card.previousSignal !== card.signal
-                ? `${previousSignalLabel} to ${card.signal.toUpperCase()}`
-                : "Current signal"}
-            </span>
-            <strong>{evidenceConfidenceScore}% evidence confidence</strong>
-          </div>
         </div>
         <button className="primary-button" onClick={() => onOpenCompany(card.ticker)}>
           {card.primaryCta}
