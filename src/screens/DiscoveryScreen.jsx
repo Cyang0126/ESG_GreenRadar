@@ -8,6 +8,7 @@ export default function DiscoveryScreen({
   initialScrollTop = 0,
   onScrollPositionChange,
   restoreKey = "initial",
+  scrollToTicker = null,
 }) {
   const feedRef = useRef(null);
 
@@ -18,6 +19,19 @@ export default function DiscoveryScreen({
       }
     });
   }, [initialScrollTop, restoreKey]);
+
+  useEffect(() => {
+    if (!scrollToTicker) return;
+    const nextCardIndex = cards.findIndex((card) => card.ticker === scrollToTicker);
+    if (nextCardIndex < 0) return;
+
+    requestAnimationFrame(() => {
+      if (!feedRef.current) return;
+      const cardHeight = feedRef.current.clientHeight || 0;
+      if (!cardHeight) return;
+      feedRef.current.scrollTo({ top: nextCardIndex * cardHeight, behavior: "auto" });
+    });
+  }, [cards, scrollToTicker]);
 
   return (
     <section

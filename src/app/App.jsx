@@ -12,6 +12,7 @@ import BottomNav from "../components/BottomNav.jsx";
 import CompanyDetailScreen from "../screens/CompanyDetailScreen.jsx";
 import DailyBriefScreen from "../screens/DailyBriefScreen.jsx";
 import DiscoveryScreen from "../screens/DiscoveryScreen.jsx";
+import FriendsScreen from "../screens/FriendsScreen.jsx";
 import LeaderboardScreen from "../screens/LeaderboardScreen.jsx";
 import { BriefPromptScreen, ClosedScreen, SplashScreen } from "../screens/LaunchScreen.jsx";
 import PresenterControls from "../components/PresenterControls.jsx";
@@ -45,6 +46,7 @@ export default function App() {
   const [isBriefUnread, setIsBriefUnread] = useState(false);
   const [briefSnapshot, setBriefSnapshot] = useState(() => buildDailyBrief(companies));
   const [discoveryRestoreKey, setDiscoveryRestoreKey] = useState(0);
+  const [discoveryAnchorTicker, setDiscoveryAnchorTicker] = useState(null);
   const [detailOpenedFromAlert, setDetailOpenedFromAlert] = useState(false);
   const [friendIds, setFriendIds] = useState(() => new Set(INITIAL_FRIEND_IDS));
 
@@ -75,6 +77,25 @@ export default function App() {
     () => buildDiscoveryCards(companiesWithWatchlist),
     [companiesWithWatchlist]
   );
+
+  useEffect(() => {
+    if (!discoveryAnchorTicker && dynamicDiscoveryCards.length > 0) {
+      setDiscoveryAnchorTicker(dynamicDiscoveryCards[0].ticker);
+    }
+  }, [discoveryAnchorTicker, dynamicDiscoveryCards]);
+
+  function updateDiscoveryAnchorFromScroll(scrollTop) {
+    discoveryScrollTopRef.current = scrollTop;
+    const frameHeight = screenFrameRef.current?.clientHeight ?? 1;
+    const currentIndex = Math.max(
+      0,
+      Math.min(dynamicDiscoveryCards.length - 1, Math.round(scrollTop / frameHeight))
+    );
+    const currentTicker = dynamicDiscoveryCards[currentIndex]?.ticker ?? null;
+    if (currentTicker && currentTicker !== discoveryAnchorTicker) {
+      setDiscoveryAnchorTicker(currentTicker);
+    }
+  }
 
   const watchedCompanies = useMemo(
     () => companiesWithWatchlist.filter((company) => company.isWatched),
@@ -517,9 +538,8 @@ export default function App() {
               onToggleWatchlist={() => {}}
               initialScrollTop={discoveryScrollTopRef.current}
               restoreKey={discoveryRestoreKey}
-              onScrollPositionChange={(scrollTop) => {
-                discoveryScrollTopRef.current = scrollTop;
-              }}
+              scrollToTicker={discoveryAnchorTicker}
+              onScrollPositionChange={updateDiscoveryAnchorFromScroll}
             />
             <BriefPromptScreen onOpenBrief={openBriefFromPrompt} onSeeLater={seeBriefLater} />
           </>
@@ -538,9 +558,8 @@ export default function App() {
             onToggleWatchlist={toggleWatchlist}
             initialScrollTop={discoveryScrollTopRef.current}
             restoreKey={discoveryRestoreKey}
-            onScrollPositionChange={(scrollTop) => {
-              discoveryScrollTopRef.current = scrollTop;
-            }}
+            scrollToTicker={discoveryAnchorTicker}
+            onScrollPositionChange={updateDiscoveryAnchorFromScroll}
           />
         )}
         {route === ROUTES.company && (
@@ -574,14 +593,20 @@ export default function App() {
         {route === ROUTES.leaderboard && (
           <LeaderboardScreen entries={leaderboardEntries} />
         )}
+        {route === ROUTES.friends && (
+          <FriendsScreen
+            friendDirectory={FRIEND_DIRECTORY}
+            friendIds={friendIds}
+            onAddFriend={addFriend}
+          />
+        )}
         {route === ROUTES.account && (
           <AccountScreen
             themeMode={themeMode}
             watchedCompanies={watchedCompanies}
             portfolioHealth={portfolioHealth}
-            friendDirectory={FRIEND_DIRECTORY}
-            friendIds={friendIds}
-            onAddFriend={addFriend}
+            friendCount={friendIds.size}
+            onOpenFriends={() => navigate(ROUTES.friends)}
             onToggleTheme={() =>
               setThemeMode((current) => (current === "dark" ? "light" : "dark"))
             }

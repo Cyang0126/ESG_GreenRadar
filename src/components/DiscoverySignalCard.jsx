@@ -9,11 +9,13 @@ export default function DiscoverySignalCard({
   const { company } = card;
   const healthScore = healthScoreFromRisk(company.deteriorationScore);
   const signalToneLabel =
-    card.signal === "red"
-      ? "Critical update"
-      : card.signal === "watch"
-        ? "Watch update"
-        : "Stable update";
+    card.previousSignal === card.signal
+      ? "Stable update"
+      : card.signal === "red"
+        ? "Critical update"
+        : card.signal === "watch"
+          ? "Watch update"
+          : "Green update";
   const previousSignalLabel = card.previousSignal ? card.previousSignal.toUpperCase() : "N/A";
   const evidenceConfidenceScore = Math.max(
     0,
@@ -71,7 +73,9 @@ export default function DiscoverySignalCard({
           </div>
           <div className="discovery-progress-meta">
             <span>
-              {previousSignalLabel} to {card.signal.toUpperCase()}
+              {card.previousSignal !== card.signal
+                ? `${previousSignalLabel} to ${card.signal.toUpperCase()}`
+                : "Current signal"}
             </span>
             <strong>{evidenceConfidenceScore}% evidence confidence</strong>
           </div>

@@ -5,6 +5,7 @@ export const ROUTES = {
   brief: "brief",
   search: "search",
   leaderboard: "leaderboard",
+  friends: "friends",
   account: "account",
   source: "source",
 };
