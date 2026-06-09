@@ -31,4 +31,5 @@ export const NAV_ITEMS = [
   { id: "watchlist", label: "Watchlist" },
   { id: "brief", label: "Brief" },
   { id: "search", label: "Search" },
+  { id: "account", label: "Account" },
 ];

@@ -18,3 +18,21 @@
   --header-height: 72px;
   --nav-height: 72px;
 }
+
+body[data-theme="dark"] {
+  --bg: #050505;
+  --surface: #0f0f10;
+  --surface-muted: #1a1a1d;
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+  --line: #27272a;
+  --green: #28d17c;
+  --green-soft: rgba(40, 209, 124, 0.16);
+  --watch: #f59e0b;
+  --watch-soft: rgba(245, 158, 11, 0.18);
+  --red: #ff385c;
+  --red-soft: rgba(255, 56, 92, 0.16);
+  --ink: #f8fafc;
+  --accent: #25f4ee;
+  --shadow: 0 22px 64px rgba(0, 0, 0, 0.48);
+}

@@ -1,7 +1,8 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ROUTES } from "./routes.js";
 import { companies, getCompanyByTicker } from "../data/companies.js";
 import { demoScenarios } from "../data/demoScenarios.js";
+import { FRIEND_DIRECTORY, INITIAL_FRIEND_IDS } from "../data/friends.js";
 import { buildDailyBrief } from "../data/dailyBrief.js";
 import { buildRedFlagAlert } from "../engine/alertRules.js";
 import { buildDiscoveryCards } from "../engine/discoveryRanking.js";
@@ -11,15 +12,25 @@ import BottomNav from "../components/BottomNav.jsx";
 import CompanyDetailScreen from "../screens/CompanyDetailScreen.jsx";
 import DailyBriefScreen from "../screens/DailyBriefScreen.jsx";
 import DiscoveryScreen from "../screens/DiscoveryScreen.jsx";
+import LeaderboardScreen from "../screens/LeaderboardScreen.jsx";
 import { BriefPromptScreen, ClosedScreen, SplashScreen } from "../screens/LaunchScreen.jsx";
 import PresenterControls from "../components/PresenterControls.jsx";
 import SearchScreen from "../screens/SearchScreen.jsx";
 import SourceDetailScreen from "../screens/SourceDetailScreen.jsx";
+import AccountScreen from "../screens/AccountScreen.jsx";
 import WatchlistScreen from "../screens/WatchlistScreen.jsx";
+import { healthScoreFromRisk } from "../utils/formatters.js";
 
 export default function App() {
   const screenFrameRef = useRef(null);
   const discoveryScrollTopRef = useRef(0);
+  const [themeMode, setThemeMode] = useState(() => {
+    try {
+      return localStorage.getItem("greenradar-theme") ?? "dark";
+    } catch {
+      return "dark";
+    }
+  });
   const [appPhase, setAppPhase] = useState("closed");
   const [route, setRoute] = useState(ROUTES.discovery);
   const [routeHistory, setRouteHistory] = useState([]);
@@ -34,6 +45,22 @@ export default function App() {
   const [isBriefUnread, setIsBriefUnread] = useState(false);
   const [briefSnapshot, setBriefSnapshot] = useState(() => buildDailyBrief(companies));
   const [discoveryRestoreKey, setDiscoveryRestoreKey] = useState(0);
+  const [detailOpenedFromAlert, setDetailOpenedFromAlert] = useState(false);
+  const [friendIds, setFriendIds] = useState(() => new Set(INITIAL_FRIEND_IDS));
+
+  useEffect(() => {
+    document.body.dataset.theme = themeMode;
+    const themeColor = themeMode === "dark" ? "#050505" : "#f8faf7";
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute("content", themeColor);
+    }
+    try {
+      localStorage.setItem("greenradar-theme", themeMode);
+    } catch {
+      // Ignore storage issues in demo environments.
+    }
+  }, [themeMode]);
 
   const companiesWithWatchlist = useMemo(
     () =>
@@ -48,6 +75,44 @@ export default function App() {
     () => buildDiscoveryCards(companiesWithWatchlist),
     [companiesWithWatchlist]
   );
+
+  const watchedCompanies = useMemo(
+    () => companiesWithWatchlist.filter((company) => company.isWatched),
+    [companiesWithWatchlist]
+  );
+
+  const portfolioHealth = useMemo(
+    () =>
+      watchedCompanies.length > 0
+        ? Math.round(
+            watchedCompanies.reduce(
+              (total, company) => total + healthScoreFromRisk(company.deteriorationScore),
+              0
+            ) / watchedCompanies.length
+          )
+        : null,
+    [watchedCompanies]
+  );
+
+  const friends = useMemo(
+    () => FRIEND_DIRECTORY.filter((friend) => friendIds.has(friend.id)),
+    [friendIds]
+  );
+
+  const leaderboardEntries = useMemo(() => {
+    const entries = [
+      {
+        id: "you",
+        name: "You",
+        handle: "@greenradar",
+        portfolioHealth: portfolioHealth ?? 0,
+        isYou: true,
+      },
+      ...friends.map((friend) => ({ ...friend, isYou: false })),
+    ];
+
+    return entries.sort((a, b) => b.portfolioHealth - a.portfolioHealth);
+  }, [friends, portfolioHealth]);
 
   const selectedCompany =
     companiesWithWatchlist.find((company) => company.ticker === selectedTicker) ??
@@ -73,6 +138,7 @@ export default function App() {
 
   function openCompany(ticker) {
     setSelectedTicker(ticker);
+    setDetailOpenedFromAlert(false);
     pushRoute(ROUTES.company);
   }
 
@@ -84,6 +150,9 @@ export default function App() {
   function navigate(routeId, { replace = false } = {}) {
     if (routeId === ROUTES.brief) {
       setIsBriefUnread(false);
+    }
+    if (routeId !== ROUTES.company) {
+      setDetailOpenedFromAlert(false);
     }
     if (!replace) {
       setRouteHistory([]);
@@ -133,6 +202,15 @@ export default function App() {
       const next = new Set(current);
       if (next.has(ticker)) next.delete(ticker);
       else next.add(ticker);
+      return next;
+    });
+  }
+
+  function addFriend(friendId) {
+    setFriendIds((current) => {
+      if (current.has(friendId)) return current;
+      const next = new Set(current);
+      next.add(friendId);
       return next;
     });
   }
@@ -397,9 +475,30 @@ export default function App() {
             </button>
           )}
           <div>
-            <p className="eyebrow">ESG Deathwatch</p>
-            <h1>GreenRadar</h1>
+            <h1>Green Radar</h1>
           </div>
+          {appPhase === "app" && (
+            <div className="topbar-actions">
+              <button
+                className={`leaderboard-button${route === ROUTES.leaderboard ? " active" : ""}`}
+                onClick={() => navigate(ROUTES.leaderboard)}
+                aria-label="Open leaderboard"
+                aria-pressed={route === ROUTES.leaderboard}
+                type="button"
+              >
+                <span className="leaderboard-button-icon" aria-hidden="true" />
+              </button>
+              <button
+                className={`search-button${route === ROUTES.search ? " active" : ""}`}
+                onClick={() => navigate(ROUTES.search)}
+                aria-label="Open search"
+                aria-pressed={route === ROUTES.search}
+                type="button"
+              >
+                <span className="search-button-icon" aria-hidden="true" />
+              </button>
+            </div>
+          )}
         </header>
 
         <main className="screen-frame" ref={screenFrameRef}>
@@ -447,6 +546,7 @@ export default function App() {
         {route === ROUTES.company && (
           <CompanyDetailScreen
             company={selectedCompany}
+            openedFromAlert={detailOpenedFromAlert}
             onToggleWatchlist={toggleWatchlist}
             onViewSource={openSource}
           />
@@ -471,6 +571,22 @@ export default function App() {
         {route === ROUTES.search && (
           <SearchScreen companies={companiesWithWatchlist} onOpenCompany={openCompany} />
         )}
+        {route === ROUTES.leaderboard && (
+          <LeaderboardScreen entries={leaderboardEntries} />
+        )}
+        {route === ROUTES.account && (
+          <AccountScreen
+            themeMode={themeMode}
+            watchedCompanies={watchedCompanies}
+            portfolioHealth={portfolioHealth}
+            friendDirectory={FRIEND_DIRECTORY}
+            friendIds={friendIds}
+            onAddFriend={addFriend}
+            onToggleTheme={() =>
+              setThemeMode((current) => (current === "dark" ? "light" : "dark"))
+            }
+          />
+        )}
           </>
         )}
         </main>
@@ -487,9 +603,11 @@ export default function App() {
               onClose={() => setAlert(null)}
               onOpen={() => {
                 if (alert.targetRoute) {
+                  setDetailOpenedFromAlert(false);
                   navigate(alert.targetRoute);
                 } else {
                   setSelectedTicker(alert.ticker);
+                  setDetailOpenedFromAlert(true);
                   navigate(ROUTES.company);
                 }
                 setAlert(null);

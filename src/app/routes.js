@@ -4,5 +4,7 @@ export const ROUTES = {
   watchlist: "watchlist",
   brief: "brief",
   search: "search",
+  leaderboard: "leaderboard",
+  account: "account",
   source: "source",
 };

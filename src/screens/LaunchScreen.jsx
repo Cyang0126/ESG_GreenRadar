@@ -1,8 +1,8 @@
 export function ClosedScreen() {
   return (
     <section className="launch-screen closed-screen">
-      <img src="/logo.svg" alt="GreenRadar" />
-      <h2>GreenRadar</h2>
+      <img src="/logo.svg" alt="Green Radar" />
+      <h2>Green Radar</h2>
       <p>Tap Open App in Presenter Controls to begin the mobile demo.</p>
     </section>
   );
@@ -11,8 +11,8 @@ export function ClosedScreen() {
 export function SplashScreen() {
   return (
     <section className="launch-screen splash-screen">
-      <img src="/logo.svg" alt="GreenRadar" />
-      <h2>GreenRadar</h2>
+      <img src="/logo.svg" alt="Green Radar" />
+      <h2>Green Radar</h2>
       <p>Checking watched companies...</p>
     </section>
   );

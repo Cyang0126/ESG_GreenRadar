@@ -3,7 +3,12 @@ import SignalBadge from "../components/SignalBadge.jsx";
 import ScoreBar from "../components/ScoreBar.jsx";
 import { sentenceCase } from "../utils/formatters.js";
 
-export default function CompanyDetailScreen({ company, onToggleWatchlist, onViewSource }) {
+export default function CompanyDetailScreen({
+  company,
+  openedFromAlert = false,
+  onToggleWatchlist,
+  onViewSource,
+}) {
   return (
     <section className="screen-stack">
       <div className="detail-hero">
@@ -23,6 +28,11 @@ export default function CompanyDetailScreen({ company, onToggleWatchlist, onView
       <section className="panel">
         <h3>Why This Flag?</h3>
         <p>{company.why}</p>
+        {openedFromAlert && (
+          <div className="exclusive-note" role="note">
+            You’re among the first 12% of users to see this information.
+          </div>
+        )}
         {company.fundMandatePressure && (
           <div className="callout">
             <strong>ESG Fund Mandate Pressure</strong>

@@ -1,7 +1,8 @@
-import { healthScoreFromRisk } from "../utils/formatters.js";
+import { getHealthBand, healthScoreFromRisk } from "../utils/formatters.js";
 
 export default function ScoreBar({ score }) {
   const healthScore = healthScoreFromRisk(score);
+  const band = getHealthBand(healthScore);
 
   return (
     <div className="score-bar-block">
@@ -10,7 +11,7 @@ export default function ScoreBar({ score }) {
         <strong>{healthScore}/100</strong>
       </div>
       <div className="score-track" aria-label={`ESG Health Score ${healthScore} out of 100`}>
-        <div className="score-fill" style={{ width: `${healthScore}%` }} />
+        <div className={`score-fill score-fill-${band}`} style={{ width: `${healthScore}%` }} />
       </div>
       <div className="threshold-row">
         <span>Red 0-35</span>
