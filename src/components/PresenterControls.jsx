@@ -2,7 +2,6 @@ export default function PresenterControls({
   scenarios,
   activePresenterActions,
   appPhase,
-  onOpenApp,
   onRunScenario,
   onGenerateDailyReport,
   onGenerateChangeReport,
@@ -13,10 +12,6 @@ export default function PresenterControls({
       <p className="eyebrow">Outside app UI</p>
       <h2>Presenter Controls</h2>
       <p>Demo controls are outside the mobile app so judges see a clean product experience.</p>
-
-      <button className="open-app-button" onClick={onOpenApp}>
-        {appPhase === "closed" ? "Click to start" : "Restart Launch"}
-      </button>
 
       <div className="scenario-list">
         {scenarios.map((scenario) => (

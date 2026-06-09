@@ -462,7 +462,6 @@ export default function App() {
         scenarios={demoScenarios}
         activePresenterActions={activePresenterActions}
         appPhase={appPhase}
-        onOpenApp={openApp}
         onRunScenario={runDemoScenario}
         onGenerateDailyReport={generateDailyReport}
         onGenerateChangeReport={generateChangeReport}
