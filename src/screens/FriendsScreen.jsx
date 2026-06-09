@@ -50,12 +50,8 @@ export default function FriendsScreen({
         <p>Compare portfolio health and add more friends from the hardcoded demo directory.</p>
         <div className="friends-hero-stats">
           <div>
-            <span>Added</span>
+            <span>Connected</span>
             <strong>{currentFriends.length}</strong>
-          </div>
-          <div>
-            <span>Available</span>
-            <strong>{suggestedFriends.length}</strong>
           </div>
         </div>
       </section>

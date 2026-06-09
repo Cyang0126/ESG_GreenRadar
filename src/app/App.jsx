@@ -440,10 +440,13 @@ export default function App() {
   }
 
   function resetDemo() {
+    setAppPhase("closed");
     setDemoOverrides({});
     setActivePresenterActions(new Set());
     setAlert(null);
     setSelectedTicker("NVDA");
+    setSelectedReceiptId(null);
+    setDetailOpenedFromAlert(false);
     setWatchlist(new Set(companies.filter((company) => company.isWatched).map((company) => company.ticker)));
     setIsBriefUnread(false);
     setBriefSnapshot(buildDailyBrief(companies));
@@ -462,6 +465,7 @@ export default function App() {
         scenarios={demoScenarios}
         activePresenterActions={activePresenterActions}
         appPhase={appPhase}
+        onOpenApp={openApp}
         onRunScenario={runDemoScenario}
         onGenerateDailyReport={generateDailyReport}
         onGenerateChangeReport={generateChangeReport}
