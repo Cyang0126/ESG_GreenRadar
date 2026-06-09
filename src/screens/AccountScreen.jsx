@@ -7,6 +7,16 @@ function getHealthLabel(score) {
   return "Red";
 }
 
+function buildActivityPath(series, width, height, baseline) {
+  return series
+    .map((value, index) => {
+      const x = (index / (series.length - 1)) * width;
+      const y = baseline - value;
+      return `${index === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`;
+    })
+    .join(" ");
+}
+
 export default function AccountScreen({
   themeMode,
   onToggleTheme,
@@ -16,6 +26,13 @@ export default function AccountScreen({
   onOpenFriends = () => {},
 }) {
   const isDarkMode = themeMode === "dark";
+  const activitySeries = [28, 34, 31, 46, 44, 52, 49, 63, 57, 66, 72, 68];
+  const activityPath = buildActivityPath(activitySeries, 320, 120, 104);
+  const activityStats = [
+    { label: "Watched posts", value: 18 },
+    { label: "Reports read", value: 11 },
+    { label: "Alerts reviewed", value: 6 },
+  ];
   const resolvedPortfolioHealth =
     portfolioHealth ??
     (watchedCompanies.length > 0
@@ -95,6 +112,59 @@ export default function AccountScreen({
               <li>Overall Portfolio ESG Score (0-100) shown as a large orbital indicator.</li>
               <li>Colour coded: green above 70, amber 40-70, red below 40.</li>
             </ul>
+            <div className="portfolio-activity-card">
+              <div className="portfolio-activity-head">
+                <span>Activity</span>
+                <strong>Last 12 weeks</strong>
+              </div>
+              <svg
+                className="portfolio-activity-chart"
+                viewBox="0 0 320 120"
+                role="img"
+                aria-label="Fake portfolio activity line graph"
+              >
+                <defs>
+                  <linearGradient id="activityGradient" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0%" stopColor="var(--red)" />
+                    <stop offset="50%" stopColor="var(--watch)" />
+                    <stop offset="100%" stopColor="var(--green)" />
+                  </linearGradient>
+                  <linearGradient id="activityFill" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="rgba(37, 244, 238, 0.24)" />
+                    <stop offset="100%" stopColor="rgba(37, 244, 238, 0)" />
+                  </linearGradient>
+                </defs>
+                <line x1="0" y1="102" x2="320" y2="102" className="portfolio-activity-baseline" />
+                <line x1="0" y1="70" x2="320" y2="70" className="portfolio-activity-grid" />
+                <line x1="0" y1="38" x2="320" y2="38" className="portfolio-activity-grid" />
+                <path
+                  d={activityPath}
+                  fill="none"
+                  stroke="url(#activityGradient)"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d={`${activityPath} L 320 112 L 0 112 Z`}
+                  fill="url(#activityFill)"
+                  opacity="0.95"
+                />
+              {activitySeries.map((value, index) => {
+                  const x = (index / (activitySeries.length - 1)) * 320;
+                  const y = 104 - value;
+                  return <circle key={index} cx={x} cy={y} r="3.5" className="portfolio-activity-dot" />;
+                })}
+              </svg>
+              <div className="portfolio-activity-stats">
+                {activityStats.map((stat) => (
+                  <div key={stat.label} className="portfolio-activity-stat">
+                    <strong>{stat.value}</strong>
+                    <span>{stat.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
             <p className="portfolio-health-note">
               Based on {watchedCompanies.length} watched {watchedCompanies.length === 1 ? "company" : "companies"}.
             </p>

@@ -20,6 +20,63 @@ export function ClosedScreen({ onStart }) {
   );
 }
 
+export function LockScreen({ alert, onStart, onOpenAlert, onDismissAlert }) {
+  const now = new Date();
+  const time = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  const date = now.toLocaleDateString([], {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+
+  return (
+    <section
+      className="launch-screen lock-screen"
+      role="button"
+      tabIndex={0}
+      aria-label="Click to start"
+      onClick={onStart}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onStart?.();
+        }
+      }}
+    >
+      <div className="lock-screen-topline">
+        <span>Locked</span>
+        <strong>{time}</strong>
+        <small>{date}</small>
+      </div>
+
+      <div className="lock-screen-stack" aria-hidden="false">
+        {alert ? (
+          <article className="lock-notification" onClick={(event) => event.stopPropagation()}>
+            <div className="lock-notification-body">
+              <strong>{alert.companyName}</strong>
+              <p>{alert.text}</p>
+            </div>
+            <div className="lock-notification-actions">
+              <button type="button" onClick={onOpenAlert}>
+                See Why
+              </button>
+              <button type="button" className="lock-notification-close" onClick={onDismissAlert}>
+                Close
+              </button>
+            </div>
+          </article>
+        ) : (
+          <div className="lock-screen-hint">
+            <img src="/logo.svg" alt="Green Radar" />
+            <h2>Green Radar</h2>
+            <p>Click to start</p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 export function SplashScreen() {
   return (
     <section className="launch-screen splash-screen">

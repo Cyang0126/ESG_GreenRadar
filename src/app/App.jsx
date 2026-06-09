@@ -7,14 +7,14 @@ import { buildDailyBrief } from "../data/dailyBrief.js";
 import { buildRedFlagAlert } from "../engine/alertRules.js";
 import { buildDiscoveryCards } from "../engine/discoveryRanking.js";
 import { enrichCompany } from "../engine/signalEngine.js";
-import AlertToast from "../components/AlertToast.jsx";
 import BottomNav from "../components/BottomNav.jsx";
+import NotificationBanner from "../components/NotificationBanner.jsx";
 import CompanyDetailScreen from "../screens/CompanyDetailScreen.jsx";
 import DailyBriefScreen from "../screens/DailyBriefScreen.jsx";
 import DiscoveryScreen from "../screens/DiscoveryScreen.jsx";
 import FriendsScreen from "../screens/FriendsScreen.jsx";
 import LeaderboardScreen from "../screens/LeaderboardScreen.jsx";
-import { BriefPromptScreen, ClosedScreen, SplashScreen } from "../screens/LaunchScreen.jsx";
+import { BriefPromptScreen, LockScreen, SplashScreen } from "../screens/LaunchScreen.jsx";
 import PresenterControls from "../components/PresenterControls.jsx";
 import SearchScreen from "../screens/SearchScreen.jsx";
 import SourceDetailScreen from "../screens/SourceDetailScreen.jsx";
@@ -42,12 +42,14 @@ export default function App() {
   const [demoOverrides, setDemoOverrides] = useState({});
   const [activePresenterActions, setActivePresenterActions] = useState(() => new Set());
   const [alert, setAlert] = useState(null);
+  const [bannerVisible, setBannerVisible] = useState(false);
   const [selectedReceiptId, setSelectedReceiptId] = useState(null);
   const [isBriefUnread, setIsBriefUnread] = useState(false);
   const [briefSnapshot, setBriefSnapshot] = useState(() => buildDailyBrief(companies));
   const [discoveryRestoreKey, setDiscoveryRestoreKey] = useState(0);
   const [detailOpenedFromAlert, setDetailOpenedFromAlert] = useState(false);
   const [friendIds, setFriendIds] = useState(() => new Set(INITIAL_FRIEND_IDS));
+  const bannerTimerRef = useRef(null);
 
   useEffect(() => {
     document.body.dataset.theme = themeMode;
@@ -62,6 +64,29 @@ export default function App() {
       // Ignore storage issues in demo environments.
     }
   }, [themeMode]);
+
+  useEffect(() => {
+    if (bannerTimerRef.current) {
+      clearTimeout(bannerTimerRef.current);
+      bannerTimerRef.current = null;
+    }
+
+    if (appPhase === "app" && alert) {
+      setBannerVisible(true);
+      bannerTimerRef.current = setTimeout(() => {
+        setBannerVisible(false);
+      }, 4000);
+    } else {
+      setBannerVisible(false);
+    }
+
+    return () => {
+      if (bannerTimerRef.current) {
+        clearTimeout(bannerTimerRef.current);
+        bannerTimerRef.current = null;
+      }
+    };
+  }, [alert, appPhase]);
 
   const companiesWithWatchlist = useMemo(
     () =>
@@ -216,10 +241,36 @@ export default function App() {
     });
   }
 
+  function openAlert() {
+    if (!alert) return;
+
+    const targetRoute = alert.targetRoute ?? ROUTES.company;
+
+    setBannerVisible(false);
+
+    if (targetRoute === ROUTES.brief) {
+      setIsBriefUnread(false);
+      setDetailOpenedFromAlert(false);
+      setAppPhase("app");
+      navigate(ROUTES.brief);
+      setAlert(null);
+      return;
+    }
+
+    setSelectedTicker(alert.ticker);
+    setDetailOpenedFromAlert(true);
+    setAppPhase("app");
+    navigate(targetRoute);
+    setAlert(null);
+  }
+
   function simulateAlert(ticker) {
     const company = companiesWithWatchlist.find((item) => item.ticker === ticker);
     const redFlagAlert = company ? buildRedFlagAlert(company) : null;
     setAlert(redFlagAlert);
+    if (redFlagAlert && appPhase === "app") {
+      setBannerVisible(true);
+    }
   }
 
   function markPresenterAction(actionId) {
@@ -444,6 +495,7 @@ export default function App() {
     setDemoOverrides({});
     setActivePresenterActions(new Set());
     setAlert(null);
+    setBannerVisible(false);
     setSelectedTicker("NVDA");
     setSelectedReceiptId(null);
     setDetailOpenedFromAlert(false);
@@ -506,7 +558,14 @@ export default function App() {
         </header>
 
         <main className="screen-frame" ref={screenFrameRef}>
-        {appPhase === "closed" && <ClosedScreen onStart={openApp} />}
+        {appPhase === "closed" && (
+          <LockScreen
+            alert={alert}
+            onStart={openApp}
+            onOpenAlert={openAlert}
+            onDismissAlert={() => setAlert(null)}
+          />
+        )}
         {appPhase === "splash" && <SplashScreen />}
         {appPhase === "prompt" && (
           <>
@@ -608,21 +667,9 @@ export default function App() {
               onNavigate={navigate}
               unreadRoutes={{ [ROUTES.brief]: isBriefUnread }}
             />
-            <AlertToast
-              alert={alert}
-              onClose={() => setAlert(null)}
-              onOpen={() => {
-                if (alert.targetRoute) {
-                  setDetailOpenedFromAlert(false);
-                  navigate(alert.targetRoute);
-                } else {
-                  setSelectedTicker(alert.ticker);
-                  setDetailOpenedFromAlert(true);
-                  navigate(ROUTES.company);
-                }
-                setAlert(null);
-              }}
-            />
+            {bannerVisible && alert && (
+              <NotificationBanner alert={alert} onOpen={openAlert} onClose={() => setAlert(null)} />
+            )}
           </>
         )}
       </div>
