@@ -15,7 +15,7 @@ export default function PresenterControls({
       <p>Demo controls are outside the mobile app so judges see a clean product experience.</p>
 
       <button className="open-app-button" onClick={onOpenApp}>
-        {appPhase === "closed" ? "Open App" : "Restart Launch"}
+        {appPhase === "closed" ? "Click to start" : "Restart Launch"}
       </button>
 
       <div className="scenario-list">

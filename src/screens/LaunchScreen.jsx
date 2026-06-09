@@ -1,9 +1,21 @@
-export function ClosedScreen() {
+export function ClosedScreen({ onStart }) {
   return (
-    <section className="launch-screen closed-screen">
+    <section
+      className="launch-screen closed-screen"
+      role="button"
+      tabIndex={0}
+      aria-label="Click to start"
+      onClick={onStart}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onStart?.();
+        }
+      }}
+    >
       <img src="/logo.svg" alt="Green Radar" />
       <h2>Green Radar</h2>
-      <p>Tap Open App in Presenter Controls to begin the mobile demo.</p>
+      <p>Click to start</p>
     </section>
   );
 }

@@ -503,7 +503,7 @@ export default function App() {
         </header>
 
         <main className="screen-frame" ref={screenFrameRef}>
-        {appPhase === "closed" && <ClosedScreen />}
+        {appPhase === "closed" && <ClosedScreen onStart={openApp} />}
         {appPhase === "splash" && <SplashScreen />}
         {appPhase === "prompt" && (
           <>

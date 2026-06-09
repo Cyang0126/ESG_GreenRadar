@@ -1581,6 +1581,12 @@ body[data-theme="dark"] .ai-brief-panel {
   background:
     radial-gradient(circle at center 32%, rgba(21, 128, 61, 0.16), transparent 34%),
     #f8faf7;
+  cursor: pointer;
+  user-select: none;
+}
+
+.closed-screen:hover {
+  filter: brightness(1.02);
 }
 
 .splash-screen {
