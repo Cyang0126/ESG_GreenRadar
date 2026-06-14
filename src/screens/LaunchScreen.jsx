@@ -104,10 +104,10 @@ export function BriefPromptScreen({ onOpenBrief, onSeeLater }) {
     <section className="prompt-overlay" aria-label="Daily Brief prompt">
       <div className="prompt-card">
         <p className="eyebrow">Daily Brief</p>
-        <h2>Your new ESG brief is ready</h2>
+        <h2>Your new brief is ready</h2>
         <p>
           AI has summarised today’s watched-company changes so you can review the
-          highest-priority ESG updates first.
+          highest-priority updates first.
         </p>
         <div className="prompt-actions">
           <button className="primary-button" onClick={onOpenBrief}>

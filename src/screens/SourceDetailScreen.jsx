@@ -56,7 +56,7 @@ export default function SourceDetailScreen({ company, receipt, onBackToCompany }
         <h3>{activeReceipt.type.includes("regulator") ? "Official enforcement notice" : "Archived disclosure record"}</h3>
         <p>
           “{activeReceipt.summary} The item was reviewed for specificity, recency,
-          independence, and relevance before it affected the ESG signal.”
+          independence, and relevance before it affected the signal.”
         </p>
         <div className="fake-url">source.demo/{company.ticker.toLowerCase()}/{activeReceipt.id}</div>
       </section>

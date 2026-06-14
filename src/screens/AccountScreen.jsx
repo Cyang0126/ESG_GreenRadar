@@ -101,7 +101,7 @@ export default function AccountScreen({
                 <span className="portfolio-orbital-mark portfolio-orbital-mark-bottom" />
                 <div className="portfolio-orbital-core">
                   <strong>{resolvedPortfolioHealth}</strong>
-                  <span>Portfolio ESG</span>
+                  <span>Portfolio Health</span>
                 </div>
               </div>
             </div>
@@ -109,7 +109,7 @@ export default function AccountScreen({
               {portfolioLabel}
             </div>
             <ul className="portfolio-health-notes">
-              <li>Overall Portfolio ESG Score (0-100) shown as a large orbital indicator.</li>
+              <li>Overall Portfolio Health Score (0-100) shown as a large orbital indicator.</li>
               <li>Colour coded: green above 70, amber 40-70, red below 40.</li>
             </ul>
             <div className="portfolio-activity-card">
@@ -257,7 +257,7 @@ export default function AccountScreen({
       <section className="panel">
         <h3>About This Demo</h3>
         <p>
-          Green Radar uses a single ESG signal engine to surface watchlist changes, daily
+          Green Radar uses a single signal engine to surface watchlist changes, daily
           briefings, and evidence-backed alerts.
         </p>
       </section>

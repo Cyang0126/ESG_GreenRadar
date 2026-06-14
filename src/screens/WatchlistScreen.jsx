@@ -9,7 +9,7 @@ export default function WatchlistScreen({ companies, onOpenCompany, onToggleWatc
     <section className="screen-stack">
       <div className="section-heading">
         <p className="eyebrow">Watchlist</p>
-        <h2>Worst ESG risk first</h2>
+        <h2>Highest risk first</h2>
       </div>
 
       {watched.length === 0 ? (

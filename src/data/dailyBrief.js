@@ -14,14 +14,14 @@ function buildHeadline(priorityCompany, changedCompanies) {
   }
 
   if (priorityCompany?.currentSignal === "red") {
-    return `${priorityCompany.name} is today’s ESG priority`;
+    return `${priorityCompany.name} is today’s priority`;
   }
 
   if (changedCompanies.length > 0) {
     return `${changedCompanies[0].name} changed signal today`;
   }
 
-  return "No urgent ESG changes in today’s watchlist";
+  return "No urgent changes in today’s watchlist";
 }
 
 function buildAiSummary(priorityCompany, changedCompanies, stableCompanies) {
@@ -30,7 +30,7 @@ function buildAiSummary(priorityCompany, changedCompanies, stableCompanies) {
       ? `${changedCompanies.length} watched company signal changed since the last report.`
       : "No watched company changed signal since the last report.";
   const prioritySentence = priorityCompany
-    ? `${priorityCompany.name} should be read first because it has the highest current ESG priority.`
+    ? `${priorityCompany.name} should be read first because it has the highest current priority.`
     : "There is no urgent company to review first today.";
   const stableSentence =
     stableCompanies.length > 0
@@ -91,7 +91,7 @@ export function buildDailyBrief(sourceCompanies) {
     readingQueue,
     stableCompanies,
     learningNote:
-      "Supplier evidence matters because ESG risk can sit outside the company itself. A strong parent-company claim becomes weaker if a material supplier has verified labour or environmental issues.",
+      "Supplier evidence matters because risk can sit outside the company itself. A strong parent-company claim becomes weaker if a material supplier has verified labour or environmental issues.",
   };
 }
 

@@ -111,7 +111,7 @@ export default function DailyBriefScreen({ brief, onOpenCompany }) {
       </section>
 
       <section className="panel">
-        <h3>ESG Explainer</h3>
+        <h3>Signal Explainer</h3>
         <p>{brief.learningNote}</p>
       </section>
     </section>

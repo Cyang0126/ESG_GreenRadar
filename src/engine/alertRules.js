@@ -15,7 +15,7 @@ export function buildRedFlagAlert(company) {
     id: `alert-${company.ticker}`,
     ticker: company.ticker,
     companyName: company.name,
-    text: `Red Flag Alert: ${company.name} moved from ${company.previousSignal.toUpperCase()} to RED after verified ESG deterioration was detected. Tap to see why.`,
+    text: `Red Flag Alert: ${company.name} moved from ${company.previousSignal.toUpperCase()} to RED after verified deterioration was detected. Tap to see why.`,
     linkedEvidenceIds: company.receipts.slice(0, 2).map((receipt) => receipt.id),
   };
 }

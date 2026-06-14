@@ -35,7 +35,7 @@ export default function CompanyDetailScreen({
         )}
         {company.fundMandatePressure && (
           <div className="callout">
-            <strong>ESG Fund Mandate Pressure</strong>
+            <strong>Fund Mandate Pressure</strong>
             <p>{company.fundMandatePressure}</p>
           </div>
         )}
@@ -54,7 +54,7 @@ export default function CompanyDetailScreen({
       </section>
 
       <section className="panel">
-        <h3>ESG Receipts</h3>
+        <h3>Evidence Receipts</h3>
         <div className="receipt-list">
           {company.receipts.map((receipt) => (
             <EvidenceReceiptCard

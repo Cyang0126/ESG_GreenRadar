@@ -7,10 +7,10 @@ export default function ScoreBar({ score }) {
   return (
     <div className="score-bar-block">
       <div className="score-row">
-        <span>ESG Health Score</span>
+        <span>Signal Health Score</span>
         <strong>{healthScore}/100</strong>
       </div>
-      <div className="score-track" aria-label={`ESG Health Score ${healthScore} out of 100`}>
+      <div className="score-track" aria-label={`Signal Health Score ${healthScore} out of 100`}>
         <div className={`score-fill score-fill-${band}`} style={{ width: `${healthScore}%` }} />
       </div>
       <div className="threshold-row">

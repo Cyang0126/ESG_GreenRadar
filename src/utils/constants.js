@@ -12,7 +12,7 @@ export const SIGNALS = {
   red: {
     label: "Red",
     tone: "red",
-    meaning: "Serious ESG deterioration, high-severity controversy, regulatory issue, or verified risk.",
+    meaning: "Serious deterioration, high-severity controversy, regulatory issue, or verified risk.",
   },
 };
 

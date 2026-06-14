@@ -56,7 +56,7 @@ export default function DiscoverySignalCard({
         <h3>{card.headline}</h3>
         <p>{card.summary}</p>
         <div className="mini-score">
-          <span>Material ESG risk</span>
+          <span>Material risk</span>
           <strong>{Math.round(company.materialityScore)}</strong>
         </div>
         <button className="primary-button" onClick={() => onOpenCompany(card.ticker)}>
