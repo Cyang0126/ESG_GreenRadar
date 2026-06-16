@@ -56,13 +56,13 @@ export default function SourceDetailScreen({ company, receipt, onBackToCompany }
         <h3>{activeReceipt.type.includes("regulator") ? "Official enforcement notice" : "Archived disclosure record"}</h3>
         <p>
           “{activeReceipt.summary} The item was reviewed for specificity, recency,
-          independence, and relevance before it affected the signal.”
+          independence, and relevance before it affected the claim verdict.”
         </p>
         <div className="fake-url">source.demo/{company.ticker.toLowerCase()}/{activeReceipt.id}</div>
       </section>
 
       <section className="panel">
-        <h3>Signal Impact</h3>
+        <h3>Claim Impact</h3>
         <p>
           This evidence is linked to <strong>{company.name}</strong> and contributes to{" "}
           <strong>{inferSignalType(activeReceipt)}</strong>.

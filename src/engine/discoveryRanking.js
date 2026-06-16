@@ -14,12 +14,12 @@ function seededJitter(seed) {
 }
 
 function rankingReasonFor(company, boosts) {
-  if (company.previousSignal !== company.currentSignal) return "Fresh signal change";
-  if ((company.materialityScore ?? company.deteriorationScore) >= 75) return "High materiality";
+  if (company.previousSignal !== company.currentSignal) return "Fresh verdict change";
+  if ((company.materialityScore ?? company.deteriorationScore) >= 75) return "Large claim gap";
   if (boosts.interestBoost >= 8) return "Watchlist match";
   if (boosts.learningBoost >= 8) return "Learning value";
   if (company.evidenceConfidenceOverall >= 80) return "Strong evidence";
-  return "Relevant update";
+  return "Relevant claim";
 }
 
 export function createDiscoveryCard(company) {
@@ -62,7 +62,7 @@ export function createDiscoveryCard(company) {
     headline: company.discoveryHeadline,
     summary: company.discoverySummary,
     evidenceConfidence: confidence >= 75 ? "high" : confidence >= 50 ? "medium" : "low",
-    primaryCta: "Why This Flag?",
+    primaryCta: "Check Claim",
     feedScore,
     algorithmScore,
     rankingReason: rankingReasonFor(company, boosts),

@@ -16,14 +16,14 @@ export default function LeaderboardScreen({ entries = [] }) {
   return (
     <section className="screen-stack leaderboard-screen">
       <div className="section-heading">
-        <p className="eyebrow">Leaderboard</p>
-        <h2>Friends only</h2>
+        <p className="eyebrow">Claim Check Leaderboard</p>
+        <h2>Evidence circle</h2>
       </div>
 
       <section className="panel leaderboard-hero">
         <p>
-          Compare portfolio health with your friends only. No public rankings, no strangers, just
-          the circle you added.
+          Compare claim-checking progress with your friends only. No public rankings, no strangers,
+          just the evidence circle you added.
         </p>
         <div className="leaderboard-summary">
           <div>
@@ -38,7 +38,7 @@ export default function LeaderboardScreen({ entries = [] }) {
       </section>
 
       <section className="panel">
-        <h3>Ranked by Portfolio Health</h3>
+        <h3>Ranked by Claim Trust Score</h3>
         <div className="leaderboard-list">
           {entries.map((entry, index) => {
             const band = getHealthBand(entry.portfolioHealth);
@@ -55,7 +55,7 @@ export default function LeaderboardScreen({ entries = [] }) {
                 </div>
                 <div className="leaderboard-score">
                   <strong>{entry.portfolioHealth}/100</strong>
-                  <div className="leaderboard-track" aria-label={`${entry.name} portfolio health ${entry.portfolioHealth} out of 100`}>
+                  <div className="leaderboard-track" aria-label={`${entry.name} claim trust score ${entry.portfolioHealth} out of 100`}>
                     <div
                       className={`score-fill score-fill-${band} leaderboard-fill`}
                       style={{ width: `${Math.max(0, Math.min(100, entry.portfolioHealth))}%` }}

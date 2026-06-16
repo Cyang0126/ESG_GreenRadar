@@ -8,14 +8,14 @@ export default function WatchlistScreen({ companies, onOpenCompany, onToggleWatc
   return (
     <section className="screen-stack">
       <div className="section-heading">
-        <p className="eyebrow">Watchlist</p>
-        <h2>Highest risk first</h2>
+        <p className="eyebrow">Followed Claims</p>
+        <h2>Highest greenwashing risk first</h2>
       </div>
 
       {watched.length === 0 ? (
         <div className="empty-state">
           <h3>No watched companies yet</h3>
-          <p>Add companies from Discovery, Search, or Company Detail.</p>
+          <p>Add claims from Discovery, Search, or Company Detail.</p>
         </div>
       ) : (
         <div className="card-list">

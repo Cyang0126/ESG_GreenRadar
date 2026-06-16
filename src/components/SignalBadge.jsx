@@ -1,4 +1,5 @@
 import { SIGNALS } from "../utils/constants.js";
+import { verdictLabel } from "../utils/formatters.js";
 
 export default function SignalBadge({ signal, previousSignal }) {
   const config = SIGNALS[signal];
@@ -7,7 +8,7 @@ export default function SignalBadge({ signal, previousSignal }) {
     <div className={`signal-badge signal-${config.tone}`}>
       <span>{config.label}</span>
       {previousSignal && previousSignal !== signal && (
-        <small>{previousSignal.toUpperCase()} changed</small>
+        <small>from {verdictLabel(previousSignal)}</small>
       )}
     </div>
   );

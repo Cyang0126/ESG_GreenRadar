@@ -11,10 +11,10 @@ export default function CompanyCard({ company, onOpenCompany, compact = false })
         </div>
         <SignalBadge signal={company.currentSignal} previousSignal={company.previousSignal} />
       </div>
-      {!compact && <p>{company.why}</p>}
+      {!compact && <p>{company.gapSummary ?? company.why}</p>}
       <ScoreBar score={company.deteriorationScore} />
       <button className="primary-button" onClick={() => onOpenCompany(company.ticker)}>
-        Open Evidence
+        Check Claim
       </button>
     </article>
   );

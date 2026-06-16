@@ -72,19 +72,19 @@ export default function AccountScreen({
       </section>
 
       <section className="panel">
-        <h3>Portfolio Health</h3>
+        <h3>Claim Trust Profile</h3>
         {resolvedPortfolioHealth === null ? (
           <div className="portfolio-empty">
             <div className="portfolio-orbital portfolio-orbital-empty" aria-hidden="true">
               <div className="portfolio-orbital-ring">
                 <div className="portfolio-orbital-core">
                   <strong>--</strong>
-                  <span>No watchlist</span>
+                  <span>No claims</span>
                 </div>
               </div>
             </div>
-            <strong>No companies on watchlist</strong>
-            <p>Add companies from Discovery, Search, or Company Detail to see portfolio health.</p>
+            <strong>No followed claims yet</strong>
+            <p>Follow company claims from Discovery, Search, or Company Detail to see your trust profile.</p>
           </div>
         ) : (
           <div
@@ -93,7 +93,7 @@ export default function AccountScreen({
           >
             <div
               className={`portfolio-orbital portfolio-${portfolioVisualBand}`}
-              aria-label={`Portfolio health ${resolvedPortfolioHealth} out of 100`}
+              aria-label={`Watched claim trust score ${resolvedPortfolioHealth} out of 100`}
             >
               <div className="portfolio-orbital-ring">
                 <span className="portfolio-orbital-mark portfolio-orbital-mark-top" />
@@ -101,7 +101,7 @@ export default function AccountScreen({
                 <span className="portfolio-orbital-mark portfolio-orbital-mark-bottom" />
                 <div className="portfolio-orbital-core">
                   <strong>{resolvedPortfolioHealth}</strong>
-                  <span>Portfolio Health</span>
+                  <span>Claim Trust</span>
                 </div>
               </div>
             </div>
@@ -109,7 +109,7 @@ export default function AccountScreen({
               {portfolioLabel}
             </div>
             <ul className="portfolio-health-notes">
-              <li>Overall Portfolio Health Score (0-100) shown as a large orbital indicator.</li>
+              <li>Watched Claim Trust Score (0-100) shown as a large orbital indicator.</li>
               <li>Colour coded: green above 70, amber 40-70, red below 40.</li>
             </ul>
             <div className="portfolio-activity-card">
@@ -121,7 +121,7 @@ export default function AccountScreen({
                 className="portfolio-activity-chart"
                 viewBox="0 0 320 120"
                 role="img"
-                aria-label="Fake portfolio activity line graph"
+                aria-label="Fake claim review activity line graph"
               >
                 <defs>
                   <linearGradient id="activityGradient" x1="0" x2="1" y1="0" y2="0">
@@ -166,7 +166,7 @@ export default function AccountScreen({
               </div>
             </div>
             <p className="portfolio-health-note">
-              Based on {watchedCompanies.length} watched {watchedCompanies.length === 1 ? "company" : "companies"}.
+              Based on {watchedCompanies.length} followed {watchedCompanies.length === 1 ? "claim" : "claims"}.
             </p>
           </div>
         )}
@@ -196,24 +196,24 @@ export default function AccountScreen({
           <article className="account-badge">
             <div className="account-badge-mark">30</div>
             <div>
-              <strong>30 Day Green Run</strong>
-              <p>Unlocked for 30 consecutive days with a green portfolio score.</p>
+              <strong>30 Day Claim Check</strong>
+              <p>Unlocked for 30 consecutive days reviewing followed company claims.</p>
             </div>
           </article>
           <article className="account-badge">
             <div className="account-badge-mark">60</div>
             <div>
-              <strong>60 Day Green Run</strong>
-              <p>Unlocked for 60 consecutive days with a green portfolio score.</p>
+              <strong>60 Day Evidence Streak</strong>
+              <p>Unlocked for 60 consecutive days checking claim evidence.</p>
             </div>
           </article>
         </div>
       </section>
 
       <section className="panel">
-        <h3>Friends</h3>
+        <h3>Evidence Circle</h3>
         <p className="friends-intro">
-          Open your friends page to view your circle and search the directory.
+          View your evidence circle and manage who appears in claim-check comparisons.
         </p>
         <button className="secondary-button friends-page-button" type="button" onClick={onOpenFriends}>
           Open Friends List

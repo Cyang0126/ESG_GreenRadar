@@ -1,5 +1,5 @@
 import DiscoveryActionRail from "./DiscoveryActionRail.jsx";
-import { healthScoreFromRisk } from "../utils/formatters.js";
+import { claimTruthScore, verdictLabel } from "../utils/formatters.js";
 
 export default function DiscoverySignalCard({
   card,
@@ -7,16 +7,16 @@ export default function DiscoverySignalCard({
   onToggleWatchlist,
 }) {
   const { company } = card;
-  const healthScore = healthScoreFromRisk(company.deteriorationScore);
+  const score = claimTruthScore(company.deteriorationScore);
   const signalChanged = card.previousSignal !== card.signal;
   const signalToneLabel = signalChanged
     ? card.signal === "red"
-      ? "Critical update"
+      ? "Risk update"
       : card.signal === "watch"
-        ? "Watch update"
-        : "Green update"
-    : "Stable update";
-  const previousSignalLabel = card.previousSignal ? card.previousSignal.toUpperCase() : "N/A";
+        ? "Unverified update"
+        : "Backed update"
+    : "Claim review";
+  const previousSignalLabel = card.previousSignal ? verdictLabel(card.previousSignal) : "N/A";
 
   return (
     <article className={`discovery-snap-card discovery-${card.signal}`}>
@@ -26,7 +26,7 @@ export default function DiscoverySignalCard({
           <p className="eyebrow">{card.cardType.replaceAll("-", " ")}</p>
           <h2>{company.name}</h2>
           <span>
-            {company.ticker} - Health {healthScore}/100
+            {company.ticker} - Truth {score}/100
           </span>
         </div>
         <div className="company-logo-mark" aria-label={`${company.name} logo mark`}>
@@ -35,8 +35,8 @@ export default function DiscoverySignalCard({
       </div>
 
       <div className={`discovery-score-orb orb-${card.signal}`}>
-        <span>{healthScore}</span>
-        <strong>{card.signal.toUpperCase()}</strong>
+        <span>{score}</span>
+        <strong>{verdictLabel(card.signal)}</strong>
         {signalChanged && <small>from {previousSignalLabel}</small>}
       </div>
 
@@ -56,11 +56,11 @@ export default function DiscoverySignalCard({
         <h3>{card.headline}</h3>
         <p>{card.summary}</p>
         <div className="mini-score">
-          <span>Material risk</span>
-          <strong>{Math.round(company.materialityScore)}</strong>
+          <span>Talk-vs-action gap</span>
+          <strong>{Math.round(company.scores.talkVsActionGap)}</strong>
         </div>
         <button className="primary-button" onClick={() => onOpenCompany(card.ticker)}>
-          {card.primaryCta}
+          Check Claim
         </button>
       </div>
     </article>

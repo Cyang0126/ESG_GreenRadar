@@ -17,12 +17,12 @@ export default function SearchScreen({ companies, onOpenCompany }) {
     <section className="screen-stack">
       <div className="section-heading">
         <p className="eyebrow">Search</p>
-        <h2>Check any demo company</h2>
+        <h2>Check a company claim</h2>
       </div>
 
       <input
         className="search-input"
-        placeholder="Search by company or ticker"
+        placeholder="Search company or ticker"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />

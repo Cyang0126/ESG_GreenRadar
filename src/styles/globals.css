@@ -555,13 +555,22 @@ body[data-theme="dark"] .exclusive-note {
 }
 
 .timeline-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+}
+
+.timeline-item .signal-badge {
+  width: 112px;
+  min-width: 112px;
+  white-space: normal;
+  text-align: center;
 }
 
 .timeline-item p {
   margin: 0;
+  min-width: 0;
 }
 
 .pill-row {

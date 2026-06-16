@@ -10,32 +10,32 @@ function buildHeadline(priorityCompany, changedCompanies) {
   const improved = changedCompanies.find((company) => company.currentSignal === "green");
 
   if (improved && priorityCompany) {
-    return `${improved.name} improved, ${priorityCompany.name} still needs attention`;
+    return `${improved.name} claim backed, ${priorityCompany.name} needs review`;
   }
 
   if (priorityCompany?.currentSignal === "red") {
-    return `${priorityCompany.name} is today’s priority`;
+    return `${priorityCompany.name} is today’s greenwashing story`;
   }
 
   if (changedCompanies.length > 0) {
-    return `${changedCompanies[0].name} changed signal today`;
+    return `${changedCompanies[0].name} claim verdict changed today`;
   }
 
-  return "No urgent changes in today’s watchlist";
+  return "No urgent greenwashing changes today";
 }
 
 function buildAiSummary(priorityCompany, changedCompanies, stableCompanies) {
   const changedSentence =
     changedCompanies.length > 0
-      ? `${changedCompanies.length} watched company signal changed since the last report.`
-      : "No watched company changed signal since the last report.";
+      ? `${changedCompanies.length} watched company claim changed verdict since the last report.`
+      : "No watched company claim changed verdict since the last report.";
   const prioritySentence = priorityCompany
-    ? `${priorityCompany.name} should be read first because it has the highest current priority.`
-    : "There is no urgent company to review first today.";
+    ? `${priorityCompany.name} has the largest talk-vs-action gap in today’s brief.`
+    : "There is no urgent claim to review first today.";
   const stableSentence =
     stableCompanies.length > 0
-      ? `${stableCompanies.length} watched companies can wait because no material change was detected.`
-      : "No watched companies are marked as stable in this report.";
+      ? `${stableCompanies.length} watched claims can wait because no material evidence change was detected.`
+      : "No watched claims are marked as stable in this report.";
 
   return `${changedSentence} ${prioritySentence} ${stableSentence}`;
 }
@@ -91,7 +91,7 @@ export function buildDailyBrief(sourceCompanies) {
     readingQueue,
     stableCompanies,
     learningNote:
-      "Supplier evidence matters because risk can sit outside the company itself. A strong parent-company claim becomes weaker if a material supplier has verified labour or environmental issues.",
+      "A company’s own green marketing is only a claim. Green Radar looks for independent evidence before treating that claim as backed.",
   };
 }
 

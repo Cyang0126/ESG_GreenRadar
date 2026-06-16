@@ -8,14 +8,16 @@ export function canTriggerRedFlagAlert(company) {
   );
 }
 
-export function buildRedFlagAlert(company) {
+export function buildGreenwashRiskAlert(company) {
   if (!canTriggerRedFlagAlert(company)) return null;
 
   return {
     id: `alert-${company.ticker}`,
     ticker: company.ticker,
     companyName: company.name,
-    text: `Red Flag Alert: ${company.name} moved from ${company.previousSignal.toUpperCase()} to RED after verified deterioration was detected. Tap to see why.`,
+    text: `Greenwash Risk Alert: ${company.name}'s sustainability claim moved to GREENWASH RISK after verified evidence widened the talk-vs-action gap. Tap to check the claim.`,
     linkedEvidenceIds: company.receipts.slice(0, 2).map((receipt) => receipt.id),
   };
 }
+
+export const buildRedFlagAlert = buildGreenwashRiskAlert;

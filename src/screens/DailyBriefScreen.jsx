@@ -1,5 +1,6 @@
 import SignalBadge from "../components/SignalBadge.jsx";
 import ScoreBar from "../components/ScoreBar.jsx";
+import { verdictLabel } from "../utils/formatters.js";
 
 function countPercent(count, total) {
   if (total === 0) return 0;
@@ -15,12 +16,12 @@ export default function DailyBriefScreen({ brief, onOpenCompany }) {
   return (
     <section className="screen-stack">
       <div className="section-heading">
-        <p className="eyebrow">Daily Brief</p>
+        <p className="eyebrow">Today’s Greenwashing Brief</p>
         <h2>{brief.headline}</h2>
       </div>
 
       <section className="panel ai-brief-panel">
-        <p className="eyebrow">AI report for today</p>
+        <p className="eyebrow">AI claim review</p>
         <p>{brief.aiSummary}</p>
       </section>
 
@@ -30,21 +31,21 @@ export default function DailyBriefScreen({ brief, onOpenCompany }) {
           <strong>{watchedTotal}</strong>
         </div>
         <div>
-          <span>Red</span>
+          <span>Risk</span>
           <strong>{brief.signalCounts.red}</strong>
         </div>
         <div>
-          <span>Watch</span>
+          <span>Unverified</span>
           <strong>{brief.signalCounts.watch}</strong>
         </div>
         <div>
-          <span>Green</span>
+          <span>Backed</span>
           <strong>{brief.signalCounts.green}</strong>
         </div>
       </section>
 
       <section className="panel">
-        <h3>Signal Mix</h3>
+        <h3>Verdict Mix</h3>
         <div className="signal-mix-bar">
           <span
             className="mix-red"
@@ -72,13 +73,13 @@ export default function DailyBriefScreen({ brief, onOpenCompany }) {
             <div>
               <p className="eyebrow">Priority now</p>
               <h3>{priority.name}</h3>
-              <p>{priority.ticker} · Read this first</p>
+              <p>{priority.ticker} · Largest talk-vs-action gap</p>
             </div>
             <SignalBadge signal={priority.currentSignal} previousSignal={priority.previousSignal} />
           </div>
           <ScoreBar score={priority.deteriorationScore} />
           <button className="primary-button" onClick={() => onOpenCompany(priority.ticker)}>
-            Open Evidence
+            Check Claim
           </button>
         </section>
       )}
@@ -90,7 +91,7 @@ export default function DailyBriefScreen({ brief, onOpenCompany }) {
             {brief.changedCompanies.map((company) => (
               <button className="brief-change-row" key={company.ticker} onClick={() => onOpenCompany(company.ticker)}>
                 <span>{company.name}</span>
-                <strong>{company.previousSignal.toUpperCase()} → {company.currentSignal.toUpperCase()}</strong>
+                <strong>{verdictLabel(company.previousSignal)} → {verdictLabel(company.currentSignal)}</strong>
               </button>
             ))}
           </div>
@@ -111,7 +112,7 @@ export default function DailyBriefScreen({ brief, onOpenCompany }) {
       </section>
 
       <section className="panel">
-        <h3>Signal Explainer</h3>
+        <h3>Claim Explainer</h3>
         <p>{brief.learningNote}</p>
       </section>
     </section>

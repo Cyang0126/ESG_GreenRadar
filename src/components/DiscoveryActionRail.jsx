@@ -10,11 +10,11 @@ export default function DiscoveryActionRail({
         onClick={() => onToggleWatchlist(company.ticker)}
       >
         <span>{company.isWatched ? "✓" : "+"}</span>
-        <small>Watch</small>
+        <small>Follow</small>
       </button>
       <button className="rail-button" onClick={() => onOpenCompany(company.ticker)}>
         <span>↗</span>
-        <small>Evidence</small>
+        <small>Claim</small>
       </button>
       <div className="rail-metric">
         <strong>{company.evidenceConfidenceOverall}%</strong>

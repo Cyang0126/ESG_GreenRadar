@@ -1,18 +1,18 @@
 export const SIGNALS = {
   green: {
-    label: "Green",
+    label: "Backed",
     tone: "green",
-    meaning: "Low deterioration risk. No major warning signs found.",
+    meaning: "Claims are supported by strong, independent evidence.",
   },
   watch: {
-    label: "Watch",
+    label: "Unverified",
     tone: "watch",
-    meaning: "Moderate concern, uncertainty, missing evidence, or early warning signs.",
+    meaning: "Claims exist, but proof is weak, missing, or mostly self-reported.",
   },
   red: {
-    label: "Red",
+    label: "Greenwash Risk",
     tone: "red",
-    meaning: "Serious deterioration, high-severity controversy, regulatory issue, or verified risk.",
+    meaning: "Big sustainability claims are not supported by enough real-world proof.",
   },
 };
 
@@ -31,5 +31,5 @@ export const NAV_ITEMS = [
   { id: "watchlist", label: "Watchlist" },
   { id: "brief", label: "Brief" },
   { id: "search", label: "Search" },
-  { id: "account", label: "Account" },
+  { id: "account", label: "Profile" },
 ];

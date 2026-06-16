@@ -308,12 +308,14 @@ export default function App() {
       discoveryHeadline: scenario.headline,
       discoverySummary: scenario.summary,
       why: scenario.why,
+      actionSummary: scenario.summary,
+      gapSummary: scenario.why,
       receipts: [scenario.receipt, ...baseCompany.receipts],
       history: [
         ...baseCompany.history,
         {
           date: scenario.receipt.date,
-          signal: "red",
+          signal: enrichCompany({ ...baseCompany, scores: scenario.scores }).currentSignal,
           note: scenario.summary,
         },
       ],
@@ -341,8 +343,8 @@ export default function App() {
     enqueueNotifications({
       id: "alert-daily-report",
       ticker: selectedTicker,
-      companyName: "Daily Brief",
-      text: "New daily report ready: today’s AI brief has summarised the latest watched-company priorities. Tap to review the update.",
+      companyName: "Greenwashing Brief",
+      text: "New claim review ready: today’s AI brief has summarised watched-company greenwashing evidence. Tap to review the update.",
       linkedEvidenceIds: [],
       targetRoute: ROUTES.brief,
     });
@@ -366,6 +368,8 @@ export default function App() {
       discoveryHeadline: config.headline,
       discoverySummary: config.summary,
       why: config.why,
+      actionSummary: config.summary,
+      gapSummary: config.why,
       receipts: [config.receipt, ...baseCompany.receipts],
       history: [
         ...baseCompany.history,
@@ -383,9 +387,9 @@ export default function App() {
       XOM: {
         targetSignal: "red",
         discoveryType: "turned-red",
-        headline: "ExxonMobil moved to Red",
-        summary: "A verified climate commitment reversal became today’s highest-priority watched update.",
-        why: "ExxonMobil is Red because commitment reversal is material, recent, and backed by reliable evidence.",
+        headline: "Greenwash Risk: Exxon climate claim widened",
+        summary: "A verified climate commitment reversal became today’s highest-priority watched claim.",
+        why: "ExxonMobil is Greenwash Risk because commitment reversal is material, recent, and backed by reliable evidence.",
         materialityScore: 92,
         alertSeverity: 90,
         scores: {
@@ -410,9 +414,9 @@ export default function App() {
       AMZN: {
         targetSignal: "watch",
         discoveryType: "trending-watch",
-        headline: "Amazon moved to Watch",
-        summary: "Worker safety evidence increased enough to require monitoring in today’s report.",
-        why: "Amazon is Watch because repeated worker safety evidence is material but not yet severe enough for Red.",
+        headline: "Unverified: Amazon safety claim needs more proof",
+        summary: "Worker safety evidence increased enough to keep the claim under review in today’s report.",
+        why: "Amazon is Unverified because repeated worker safety evidence is material but not yet severe enough for Greenwash Risk.",
         materialityScore: 66,
         alertSeverity: 60,
         scores: {
@@ -437,9 +441,9 @@ export default function App() {
       MSFT: {
         targetSignal: "green",
         discoveryType: "turned-green",
-        headline: "Microsoft remains Green",
+        headline: "Backed: Microsoft carbon claim remains supported",
         summary: "Carbon progress evidence stayed stable and specific in today’s watched-company review.",
-        why: "Microsoft remains Green because measurable carbon progress evidence is recent and externally reviewable.",
+        why: "Microsoft remains Backed because measurable carbon progress evidence is recent and externally reviewable.",
         materialityScore: 24,
         alertSeverity: 16,
         scores: {
@@ -492,8 +496,8 @@ export default function App() {
     enqueueNotifications({
       id: "alert-forced-report",
       ticker: "XOM",
-      companyName: "Daily Brief",
-      text: "New watched-company changes detected: one followed company moved to Red and another moved to Watch. Tap to review the brief.",
+      companyName: "Greenwashing Brief",
+      text: "New watched-claim changes detected: one followed claim became Greenwash Risk and another became Unverified. Tap to review the brief.",
       linkedEvidenceIds: ["ev-forced-xom-001", "ev-forced-amzn-001"],
       targetRoute: ROUTES.brief,
     });
@@ -547,7 +551,7 @@ export default function App() {
               <button
                 className={`leaderboard-button${route === ROUTES.leaderboard ? " active" : ""}`}
                 onClick={() => navigate(ROUTES.leaderboard)}
-                aria-label="Open leaderboard"
+                aria-label="Open claim check leaderboard"
                 aria-pressed={route === ROUTES.leaderboard}
                 type="button"
               >

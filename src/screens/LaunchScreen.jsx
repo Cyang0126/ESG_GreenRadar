@@ -94,7 +94,7 @@ export function SplashScreen() {
     <section className="launch-screen splash-screen">
       <img src="/logo.svg" alt="Green Radar" />
       <h2>Green Radar</h2>
-      <p>Checking watched companies...</p>
+      <p>Checking watched claims...</p>
     </section>
   );
 }
@@ -103,11 +103,11 @@ export function BriefPromptScreen({ onOpenBrief, onSeeLater }) {
   return (
     <section className="prompt-overlay" aria-label="Daily Brief prompt">
       <div className="prompt-card">
-        <p className="eyebrow">Daily Brief</p>
-        <h2>Your new brief is ready</h2>
+        <p className="eyebrow">Greenwashing Brief</p>
+        <h2>Your claim review is ready</h2>
         <p>
-          AI has summarised today’s watched-company changes so you can review the
-          highest-priority updates first.
+          AI has summarised today’s watched-company claims, evidence changes, and
+          highest-priority greenwashing risks.
         </p>
         <div className="prompt-actions">
           <button className="primary-button" onClick={onOpenBrief}>

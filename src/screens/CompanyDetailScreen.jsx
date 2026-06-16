@@ -26,23 +26,31 @@ export default function CompanyDetailScreen({
       </button>
 
       <section className="panel">
-        <h3>Why This Flag?</h3>
-        <p>{company.why}</p>
+        <h3>What They Say</h3>
+        <p>{company.claim}</p>
+        <div className="meta-strip">
+          <span>Claim source</span>
+          <strong>{company.claimSource}</strong>
+        </div>
+      </section>
+
+      <section className="panel">
+        <h3>What Evidence Shows</h3>
+        <p>{company.actionSummary}</p>
         {openedFromAlert && (
           <div className="exclusive-note" role="note">
-            You’re among the first 12% of users to see this information.
-          </div>
-        )}
-        {company.fundMandatePressure && (
-          <div className="callout">
-            <strong>Fund Mandate Pressure</strong>
-            <p>{company.fundMandatePressure}</p>
+            This watched claim was flagged early because new evidence changed the verdict.
           </div>
         )}
       </section>
 
       <section className="panel">
-        <h3>Signal Breakdown</h3>
+        <h3>The Gap</h3>
+        <p>{company.gapSummary ?? company.why}</p>
+      </section>
+
+      <section className="panel">
+        <h3>Talk-vs-Action Breakdown</h3>
         <div className="breakdown-grid">
           {Object.entries(company.scores).map(([key, value]) => (
             <div className="breakdown-item" key={key}>
@@ -67,7 +75,7 @@ export default function CompanyDetailScreen({
       </section>
 
       <section className="panel">
-        <h3>Signal History</h3>
+        <h3>Verdict History</h3>
         <div className="timeline">
           {company.history.map((item) => (
             <div className="timeline-item" key={`${item.date}-${item.signal}`}>

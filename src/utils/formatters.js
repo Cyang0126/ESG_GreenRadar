@@ -12,6 +12,16 @@ export function healthScoreFromRisk(riskScore) {
   return Math.max(0, Math.min(100, Math.round(100 - riskScore)));
 }
 
+export function claimTruthScore(riskScore) {
+  return Math.max(0, Math.min(100, Math.round(100 - riskScore)));
+}
+
+export function verdictLabel(signal) {
+  if (signal === "red") return "GREENWASH RISK";
+  if (signal === "watch") return "UNVERIFIED";
+  return "BACKED";
+}
+
 export function formatDate(value) {
   return new Intl.DateTimeFormat("en-SG", {
     month: "short",
